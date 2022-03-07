@@ -6,21 +6,22 @@ function calculateAngle (hip, shin) {
   return Math.acos(dot(hip, shin) / (mag(hip) * mag(shin)));
 };
 
+function vector (dotA, dotB) {
+  return ({
+    x: dotA.x - dotB.x,
+    y: dotA.y - dotB.y,
+    z: dotA.z - dotB.z
+  });
+}
+
 export default function Knee ({ landmarks }) {
   const
     { hip, knee, ankle } = landmarks,
-    hipV = {
-      x: hip.x - knee.x,
-      y: hip.y - knee.y,
-      z: hip.z - knee.z
-    },
-    shinV = {
-      x: ankle.x - knee.x,
-      y: ankle.y - knee.y,
-      z: ankle.z - knee.z
-    },
+    degreesInRadian = 180 / Math.PI,
+    hipV = vector(hip, knee),
+    shinV = vector(ankle, knee),
     radians = calculateAngle(hipV, shinV),
-    degrees = radians * 180 / Math.PI;
+    degrees = radians * degreesInRadian;
 
   return `${radians} (${degrees}°)`
 };
